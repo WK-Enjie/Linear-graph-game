@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎯 Graph Master - Learn Linear Graphs!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-grid"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+    
+    <!-- Confetti Container -->
+    <div id="confetti-container"></div>
+    
+    <div class="container">
+        <!-- Animated Header -->
+        <header class="game-header">
+            <div class="header-content">
+                <h1 class="title-glow">
+                    <i class="fas fa-rocket"></i> GRAPH MASTER
+                    <span class="title-sub">Learn Linear Graphs</span>
+                </h1>
+                <div class="level-display">
+                    <div class="level-badge">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Level: <span id="level">1</span></span>
+                    </div>
+                    <div class="streak-badge">
+                        <i class="fas fa-fire"></i>
+                        <span>Streak: <span id="streak">0</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-description">
+                <p class="pulse-text">🎮 <strong>Game Mode:</strong> Adjust slope & intercept to match targets!</p>
+                <p class="sparkle-text">For Secondary 2 Students | Interactive Learning</p>
+            </div>
+        </header>
+        
+        <div class="game-container">
+            <!-- Left Panel - Game Info & Challenges -->
+            <div class="panel game-info-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-gamepad"></i> MISSION CONTROL</h2>
+                    <div class="panel-badge">ACTIVE</div>
+                </div>
+                
+                <!-- Mission Display -->
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>CURRENT MISSION</h3>
+                    </div>
+                    <div class="mission-content">
+                        <p>Create the line: <span class="mission-target" id="mission-target">y = 2x + 1</span></p>
+                        <div class="mission-timer">
+                            <i class="fas fa-clock"></i>
+                            <span>Time: <span id="timer">60</span>s</span>
+                        </div>
+                    </div>
+                    <div class="mission-progress">
+                        <div class="mission-bar">
+                            <div class="mission-fill" id="mission-fill"></div>
+                        </div>
+                        <span class="mission-score">+50 points</span>
+                    </div>
+                </div>
+                
+                <!-- Challenges -->
+                <div class="challenges-container">
+                    <h3><i class="fas fa-tasks"></i> DAILY CHALLENGES</h3>
+                    <div class="challenges-list">
+                        <div class="challenge completed">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Complete 5 equations</span>
+                            <span class="challenge-reward">+20 XP</span>
+                        </div>
+                        <div class="challenge active">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Get 3 in a row correct</span>
+                            <span class="challenge-reward">+30 XP</span>
+                        </div>
+                        <div class="challenge locked">
+                            <i class="fas fa-lock"></i>
+                            <span>Master negative slopes</span>
+                            <span class="challenge-reward">+50 XP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Lesson -->
+                <div class="lesson-card">
+                    <h3><i class="fas fa-lightbulb"></i> QUICK TIP</h3>
+                    <div class="tip-content">
+                        <p><strong>Remember:</strong> y = <span class="highlight">m</span>x + <span class="highlight">c</span></p>
+                        <div class="tip-grid">
+                            <div class="tip-item">
+                                <div class="tip-icon positive">+</div>
+                                <span>Positive Slope ↗</span>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon negative">-</div>
+                                <span>Negative Slope ↘</span>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon zero">0</div>
+                                <span>Zero Slope →</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center Panel - Interactive Graph -->
+            <div class="panel graph-panel">
+                <div class="panel-header graph-header">
+                    <h2><i class="fas fa-chart-line"></i> INTERACTIVE GRAPH</h2>
+                    <div class="score-display">
+                        <i class="fas fa-star"></i>
+                        <span>SCORE: <span id="score">0</span></span>
+                    </div>
+                </div>
+                
+                <!-- Target Equation Display -->
+                <div class="target-display">
+                    <div class="target-equation">
+                        <span class="target-label">TARGET:</span>
+                        <div class="equation-box target">
+                            <span class="equation-text">y = <span id="target-slope">2</span>x <span id="target-sign">+</span> <span id="target-intercept">1</span></span>
+                        </div>
+                    </div>
+                    <div class="current-equation">
+                        <span class="current-label">YOUR LINE:</span>
+                        <div class="equation-box current">
+                            <span class="equation-text">y = <span id="current-slope">2</span>x <span id="current-sign">+</span> <span id="current-intercept">1</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Controls -->
+                <div class="enhanced-controls">
+                    <!-- Slope Control -->
+                    <div class="control-group">
+                        <div class="control-header">
+                            <i class="fas fa-mountain"></i>
+                            <h4>SLOPE (m)</h4>
+                            <span class="control-value" id="slope-value">2.0</span>
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span class="slider-min">-5.0</span>
+                                <span class="slider-mid">Flat</span>
+                                <span class="slider-max">+5.0</span>
+                            </div>
+                            <input type="range" id="slope" min="-5" max="5" step="0.1" value="2" class="glow-slider">
+                            <div class="slider-ticks">
+                                <span class="tick">Steep Down</span>
+                                <span class="tick">Gradual</span>
+                                <span class="tick">Steep Up</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Intercept Control -->
+                    <div class="control-group">
+                        <div class="control-header">
+                            <i class="fas fa-arrows-alt-v"></i>
+                            <h4>Y-INTERCEPT (c)</h4>
+                            <span class="control-value" id="intercept-value">1</span>
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span class="slider-min">-10</span>
+                                <span class="slider-mid">Origin</span>
+                                <span class="slider-max">+10</span>
+                            </div>
+                            <input type="range" id="intercept" min="-10" max="10" step="1" value="1" class="glow-slider">
+                            <div class="slider-ticks">
+                                <span class="tick">Below Axis</span>
+                                <span class="tick">On Axis</span>
+                                <span class="tick">Above Axis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn-game btn-random" id="random-btn">
+                        <i class="fas fa-dice"></i>
+                        <span>Random Challenge</span>
+                    </button>
+                    <button class="btn-game btn-hint" id="hint-btn">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Get Hint</span>
+                    </button>
+                    <button class="btn-game btn-submit" id="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Submit Answer</span>
+                    </button>
+                    <button class="btn-game btn-reset" id="reset-btn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+                
+                <!-- Graph Canvas -->
+                <div class="graph-canvas-container">
+                    <div class="canvas-header">
+                        <div class="canvas-controls">
+                            <button class="btn-canvas" id="zoom-in">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="btn-canvas" id="zoom-out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="btn-canvas" id="grid-toggle">
+                                <i class="fas fa-th"></i>
+                            </button>
+                        </div>
+                        <div class="zoom-level">
+                            <i class="fas fa-expand-alt"></i>
+                            <span>Zoom: <span id="zoom-level">1x</span></span>
+                        </div>
+                    </div>
+                    <canvas id="graphCanvas"></canvas>
+                    <div class="canvas-overlay" id="accuracy-overlay">
+                        <div class="accuracy-display">
+                            <i class="fas fa-crosshairs"></i>
+                            <span>Accuracy: <span id="accuracy">100%</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Feedback -->
+                <div class="feedback-container">
+                    <div class="feedback-message" id="feedback">
+                        <div class="feedback-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="feedback-text">
+                            Adjust the sliders to match the target equation!
+                        </div>
+                    </div>
+                    <div class="combo-meter">
+                        <div class="combo-display">
+                            <i class="fas fa-bolt"></i>
+                            <span>COMBO: <span id="combo">1x</span></span>
+                        </div>
+                        <div class="combo-bar">
+                            <div class="combo-fill" id="combo-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel - Stats & Progress -->
+            <div class="panel stats-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-chart-bar"></i> PROGRESS TRACKER</h2>
+                    <div class="xp-badge">
+                        <i class="fas fa-award"></i>
+                        <span id="xp">0</span> XP
+                    </div>
+                </div>
+                
+                <!-- Player Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card correct">
+                        <div class="stat-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Correct</h4>
+                            <span class="stat-value" id="correct-count">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card incorrect">
+                        <div class="stat-icon">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Incorrect</h4>
+                            <span class="stat-value" id="incorrect-count">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card time">
+                        <div class="stat-icon">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Avg. Time</h4>
+                            <span class="stat-value" id="avg-time">0s</span>
+                        </div>
+                    </div>
+                    <div class="stat-card accuracy">
+                        <div class="stat-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Accuracy</h4>
+                            <span class="stat-value" id="accuracy-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bars -->
+                <div class="progress-section">
+                    <h3><i class="fas fa-trophy"></i> LEVEL PROGRESS</h3>
+                    <div class="progress-track">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                            <div class="progress-marker" style="left: 20%;">Lvl 2</div>
+                            <div class="progress-marker" style="left: 45%;">Lvl 3</div>
+                            <div class="progress-marker" style="left: 70%;">Lvl 4</div>
+                            <div class="progress-marker" style="left: 90%;">Lvl 5</div>
+                        </div>
+                        <div class="progress-info">
+                            <span>Level <span id="current-level">1</span></span>
+                            <span><span id="current-xp">0</span>/<span id="next-level-xp">100</span> XP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Achievement Badges -->
+                <div class="achievements-section">
+                    <h3><i class="fas fa-medal"></i> ACHIEVEMENTS</h3>
+                    <div class="badges-grid">
+                        <div class="badge earned" data-tooltip="Complete first equation">
+                            <i class="fas fa-star"></i>
+                            <span>First Step</span>
+                        </div>
+                        <div class="badge earned" data-tooltip="Get 3 correct in a row">
+                            <i class="fas fa-fire"></i>
+                            <span>Hot Streak</span>
+                        </div>
+                        <div class="badge locked" data-tooltip="Reach level 3">
+                            <i class="fas fa-lock"></i>
+                            <span>Graph Master</span>
+                        </div>
+                        <div class="badge locked" data-tooltip="100% accuracy">
+                            <i class="fas fa-lock"></i>
+                            <span>Perfect Score</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Next Challenge -->
+                <div class="next-challenge">
+                    <h3><i class="fas fa-arrow-right"></i> NEXT CHALLENGE</h3>
+                    <div class="challenge-preview">
+                        <div class="challenge-equation" id="next-challenge-eq">
+                            y = <span class="challenge-slope">-3</span>x + <span class="challenge-intercept">2</span>
+                        </div>
+                        <div class="challenge-rewards">
+                            <span class="reward-item"><i class="fas fa-star"></i> +75 XP</span>
+                            <span class="reward-item"><i class="fas fa-gem"></i> New Badge</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="game-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-graduation-cap"></i> Learning Goals</h4>
+                    <p>Understand slope-intercept form • Interpret linear graphs • Apply mathematical concepts</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-gamepad"></i> Game Features</h4>
+                    <p>Interactive graphing • Progress tracking • Achievement system • Mobile optimized</p>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fab fa-github"></i> Source Code</h4>
+                    <a href="https://github.com/YOUR-USERNAME/linear-graph-game" class="github-link" target="_blank">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Made with ❤️ for Secondary 2 Mathematics | Graph Master v2.0</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Sound Effects (optional) -->
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
+    <audio id="incorrectSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+    <audio id="levelUpSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
