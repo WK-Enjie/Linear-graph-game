@@ -94,7 +94,7 @@ header p {
 }
 
 .progress-bar {
-    height: 100%;
+    100%;
     background: linear-gradient(90deg, #2ecc71, #27ae60);
     border-radius: 10px;
     width: 25%;
@@ -108,6 +108,7 @@ header p {
     flex-direction: column;
 }
 
+/* MOBILE FIX: Responsive canvas container */
 .canvas-container {
     position: relative;
     border: 3px solid #3498db;
@@ -118,7 +119,10 @@ header p {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
-    height: 600px;
+    /* MOBILE FIX: Removed fixed height */
+    height: auto;
+    /* MOBILE FIX: Maintain aspect ratio */
+    aspect-ratio: 1 / 1;
 }
 
 #grid-canvas {
@@ -427,6 +431,20 @@ footer {
     footer {
         font-size: 0.95rem;
         padding: 15px;
+    }
+    
+    /* MOBILE FIX: Better touch targets on small screens */
+    .btn {
+        padding: 14px 20px;
+        font-size: 1.2rem;
+    }
+    
+    .level-card {
+        padding: 15px 10px;
+    }
+    
+    .level-card h3 {
+        font-size: 1.3rem;
     }
 }
 

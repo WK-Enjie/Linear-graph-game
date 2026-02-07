@@ -40,11 +40,11 @@ function init() {
 }
 
 function setupCanvas() {
-    // CRITICAL FIX FOR GITHUB PAGES: Set explicit canvas dimensions to prevent browser scaling
+    // CRITICAL FIX FOR MOBILE: Set explicit canvas dimensions to prevent browser scaling
     canvas.width = 600;
     canvas.height = 600;
     
-    // Get actual canvas dimensions
+    // Get actual canvas dimensions (for mobile)
     const canvasRect = canvas.getBoundingClientRect();
     appState.canvasWidth = canvasRect.width;
     appState.canvasHeight = canvasRect.height;
@@ -84,7 +84,7 @@ function setupCanvas() {
     
     canvas.addEventListener('touchmove', (e) => {
         e.preventDefault();
-        handleCanvasTouch(e, 'move');
+        handleTouch(e, 'move');
     });
     
     canvas.addEventListener('touchend', (e) => {
