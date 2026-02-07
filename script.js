@@ -1,4 +1,4 @@
-// Coordinate Geometry Learning Tool - CORRECTED VERSION
+// Coordinate Geometry Learning Tool - FINAL CORRECTED VERSION
 // Coordinates are ONLY shown in text instructions, NOT visually on canvas until after attempt
 
 const appState = {
@@ -40,80 +40,81 @@ function init() {
 }
 
 function setupCanvas() {
-    // CRITICAL FIX FOR MOBILE: Set explicit canvas dimensions to prevent browser scaling
-    canvas.width = 600;
-    canvas.height = 600;
+    // CRITICAL FIX: Get container dimensions and set canvas to match EXACTLY
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
     
-    // Get actual canvas dimensions (for mobile)
-    const canvasRect = canvas.getBoundingClientRect();
-    appState.canvasWidth = canvasRect.width;
-    appState.canvasHeight = canvasRect.height;
+    // Set canvas drawing buffer to match container size (prevents scaling issues)
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
     
-    // Recalculate offset based on actual size
+    // If container has zero size (hidden element), retry after delay
+    if (containerWidth === 0 || containerHeight === 0) {
+        setTimeout(setupCanvas, 100);
+        return;
+    }
+    
+    // Update app state with actual canvas dimensions
+    appState.canvasWidth = canvas.width;
+    appState.canvasHeight = canvas.height;
+    
+    // Calculate center point of canvas
     appState.canvasOffset = {
         x: appState.canvasWidth / 2,
         y: appState.canvasHeight / 2
     };
     
-    // Set canvas scale based on actual size (20 units total)
+    // Calculate scale: 20 units total (-10 to 10) across the smaller dimension
     appState.canvasScale = Math.min(appState.canvasWidth, appState.canvasHeight) / 20;
     
     drawGrid();
     
+    // Mouse move event for desktop
     canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // FIXED: Proper coordinate calculation
-        const gridX = Math.round((x - appState.canvasOffset.x) / appState.canvasScale);
-        const gridY = Math.round((appState.canvasOffset.y - y) / appState.canvasScale);
-        
-        coordinatesDisplay.textContent = `Coordinates: (${gridX}, ${gridY})`;
-        
-        drawGrid();
-        highlightGridCell(gridX, gridY);
-        drawLevelContent();
+        handlePointerMove(e.clientX, e.clientY);
     });
     
-    // Touch support for mobile devices
+    // Touch events for mobile
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        handleCanvasTouch(e, 'start');
+        const touch = e.touches[0];
+        handleCanvasClick(touch.clientX, touch.clientY);
     });
     
     canvas.addEventListener('touchmove', (e) => {
         e.preventDefault();
-        handleTouch(e, 'move');
-    });
-    
-    canvas.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        handleCanvasTouch(e, 'end');
+        const touch = e.touches[0];
+        handlePointerMove(touch.clientX, touch.clientY);
     });
 }
 
-function handleCanvasTouch(e, type) {
+// Unified pointer handling for mouse and touch
+function handlePointerMove(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0] || e.changedTouches[0];
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
     
-    // FIXED: Use the same calculation as mouse events
+    // Calculate grid coordinates using ACTUAL canvas dimensions
     const gridX = Math.round((x - appState.canvasOffset.x) / appState.canvasScale);
     const gridY = Math.round((appState.canvasOffset.y - y) / appState.canvasScale);
     
-    if (type === 'move') {
-        coordinatesDisplay.textContent = `Coordinates: (${gridX}, ${gridY})`;
-        drawGrid();
-        highlightGridCell(gridX, gridY);
-        drawLevelContent();
-    } else if (type === 'end') {
-        handleCanvasClick(gridX, gridY);
-    }
+    coordinatesDisplay.textContent = `Coordinates: (${gridX}, ${gridY})`;
+    
+    drawGrid();
+    highlightGridCell(gridX, gridY);
+    drawLevelContent();
 }
 
-function handleCanvasClick(gridX, gridY) {
+function handleCanvasClick(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    
+    // Calculate grid coordinates using ACTUAL canvas dimensions
+    const gridX = Math.round((x - appState.canvasOffset.x) / appState.canvasScale);
+    const gridY = Math.round((appState.canvasOffset.y - y) / appState.canvasScale);
+    
     if (appState.currentLevel === 1 && !appState.answerSubmitted) {
         appState.userClick = { x: gridX, y: gridY };
         feedback.innerHTML = `You clicked (${gridX}, ${gridY}).<br>Click "Submit Answer" to check.`;
@@ -423,6 +424,15 @@ function setupEventListeners() {
             card.classList.add('active');
         });
     });
+    
+    // Add window resize handler to redraw canvas
+    window.addEventListener('resize', () => {
+        // Only redraw if canvas container is visible
+        if (canvas.offsetParent !== null) {
+            setupCanvas();
+            drawLevelContent();
+        }
+    });
 }
 
 function loadLevel(level) {
@@ -728,4 +738,5 @@ function showFeedback(isCorrect, message) {
     feedback.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
 }
 
-window.addEventListener('DOMContentLoaded', init);
+// Initialize when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', init);
