@@ -3,79 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Interactive coordinate geometry learning tool for students">
-    <title>Coordinate Geometry Explorer</title>
+    <title>📐 Coordinate Geometry Explorer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Coordinate Geometry Explorer</h1>
-            <p>Master coordinate geometry through interactive challenges</p>
-        </header>
-        
-        <div class="level-selector">
-            <div class="level-indicator">
-                <span>Current Level:</span>
-                <div id="level-display" class="level-badge">1</div>
+    <div class="app-container">
+        <div class="header">
+            <h1>📐 Coordinate Geometry Explorer</h1>
+            <p>Master Coordinates, Gradients & Equations</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="learn">📚 Learn Topics</button>
+            <button class="tab-btn" data-tab="games">🎮 Games</button>
+        </div>
+
+        <!-- LEARN TAB -->
+        <div id="learn-tab" class="tab-content active">
+            <div class="level-header">
+                <div id="levelLabel">Level 1: Coordinates</div>
+                <div class="level-progress">
+                    <div id="levelProgress" class="level-progress-bar"></div>
+                </div>
             </div>
-            <div class="progress-container">
-                <div id="progress-bar" class="progress-bar"></div>
+
+            <div class="learn-layout">
+                <div class="canvas-wrapper">
+                    <canvas id="mainCanvas"></canvas>
+                    <div id="coordDisplay" class="coord-display">(0, 0)</div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="question-area">
+                        <h3 id="questionTitle">Topic Title</h3>
+                        <div id="questionText">Loading...</div>
+                    </div>
+
+                    <div id="inputArea"></div>
+
+                    <!-- Level 4 Table -->
+                    <div id="tableContainer" class="table-container" style="display: none;">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>x</th><th>y</th></tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="feedbackArea" class="feedback-area"></div>
+
+                    <div class="btn-group">
+                        <button id="checkBtn" class="btn btn-primary">Check Answer</button>
+                        <button id="nextBtn" class="btn btn-success" style="display: none;">Next Level ➔</button>
+                        <button id="resetBtn" class="btn btn-secondary">New Question</button>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="main-content">
-            <div class="canvas-container">
-                <!-- CRITICAL FIX: Removed width/height attributes -->
-                <canvas id="grid-canvas"></canvas>
-                <div id="coordinates-display" class="coordinates-display">Coordinates: (0, 0)</div>
-            </div>
+
+        <!-- GAMES TAB -->
+        <div id="games-tab" class="tab-content">
+            <h2 style="text-align: center; margin-bottom: 20px;">🎯 Geometry Games</h2>
             
-            <div class="instructions-panel">
-                <div id="level-title" class="level-title">Level 1: Coordinate Basics</div>
-                <div id="instructions" class="instructions">
-                    <p>Click on the grid to find the point <span id="target-point">(3, 4)</span></p>
-                    <p>Move your mouse over the grid to see coordinates</p>
+            <div id="gameMenu" class="game-menu">
+                <div class="game-card" data-game="shape">
+                    <div class="icon">🔷</div>
+                    <h3>Shape Builder</h3>
+                    <p>Finish the Squares, Rectangles & Parallelograms!</p>
+                    <button class="btn btn-primary">Play</button>
+                </div>
+                <div class="game-card" data-game="gradient">
+                    <div class="icon">⚖️</div>
+                    <h3>Gradient Matcher</h3>
+                    <p>Do lines share a gradient?</p>
+                    <button class="btn btn-primary">Play</button>
+                </div>
+            </div>
+
+            <div id="gameInterface" class="game-interface" style="display: none;">
+                <div class="game-header">
+                    <button id="exitGame" class="btn btn-secondary" style="width: auto; padding: 8px 15px;">← Exit</button>
+                    <div>⏳ <span id="gameTimer">60</span>s</div>
+                    <div>Score: <span id="gameScore">0</span></div>
                 </div>
                 
-                <div id="input-area" class="input-area">
-                    <!-- Input fields will be dynamically inserted here based on level -->
+                <div class="game-workspace">
+                    <div class="canvas-wrapper">
+                        <canvas id="gameCanvas"></canvas>
+                    </div>
+                    
+                    <div class="game-panel">
+                        <div class="game-instructions" id="gameInstructions">
+                            Loading instructions...
+                        </div>
+                        <div id="gameQuestionBox" class="game-question-box">
+                            Loading...
+                        </div>
+                        <div id="gameActionArea"></div>
+                    </div>
                 </div>
-                
-                <div id="feedback" class="feedback"></div>
-                
-                <div class="controls">
-                    <button id="submit-btn" class="btn primary">Submit Answer</button>
-                    <button id="next-btn" class="btn success" style="display: none;">Next Level</button>
-                    <button id="reset-btn" class="btn">Reset</button>
+            </div>
+
+            <div id="gameOverModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <h2>🎉 Game Over!</h2>
+                    <div class="final-score-display">
+                        <div>Score</div>
+                        <h1 id="finalScore">0</h1>
+                    </div>
+                    <div class="btn-group">
+                        <button id="playAgainBtn" class="btn btn-primary">Play Again</button>
+                        <button id="closeModalBtn" class="btn btn-secondary">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <div class="level-info">
-            <div class="level-card active" data-level="1">
-                <h3>Level 1: Coordinates</h3>
-                <p>Learn to identify and plot points on the coordinate plane</p>
-            </div>
-            <div class="level-card" data-level="2">
-                <h3>Level 2: Gradient</h3>
-                <p>Calculate the slope between two points</p>
-            </div>
-            <div class="level-card" data-level="3">
-                <h3>Level 3: Equations</h3>
-                <p>Find the equation of a line from two points</p>
-            </div>
-            <div class="level-card" data-level="4">
-                <h3>Level 4: Graph Drawing</h3>
-                <p>Draw lines based on their equations</p>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Coordinate Geometry Explorer &copy; 2026 | An interactive learning tool for students</p>
-        </footer>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
